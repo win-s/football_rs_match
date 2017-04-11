@@ -1,0 +1,85 @@
+extends layout
+
+block content
+    script(type='text/javascript').
+        function getUrlObj(){
+            let url = window.location.href;
+            let urlPart = url.split('?');
+            return {
+                host:urlPart[0],
+                queryString:urlPart[1]
+            }
+            
+        }
+        function addItems(btn){
+            window.location = 'http://'+ window.location.host + '/football/teams/add-form';
+        }
+        function deleteItems(btn){
+            var checkedItems = [];
+            $('input[type=checkbox]').each(function(){
+                if(this.checked){
+                    checkedItems.push(this.value);
+                }
+            });
+            console.log(checkedItems);
+        }
+        $(document).ready(()=>{
+            $('input[name=search]')
+                .keypress((e)=>{
+                    if(e.which === 13){//press enter
+                        var searchText=e.target.value;
+                        var index = window.location.href.indexOf('?');
+                        var url =window.location.href;
+                        if(index !== -1){
+                            url = url.slice(0,index);
+                        }
+                        url= url + '?s='+searchText;
+                        window.location = url;
+                    }
+                });
+            $('#editBtn').click(()=>{
+                var url = getUrlObj(window.location.href);
+                window.location = url.host +'/edit?' + url.queryString;
+            });
+        });
+    .container
+        .row.header
+            .col-xs-6
+                h1 Team List
+            .col-xs-6(style='text-align:right')
+                .btn-toolbar(role='toolbar')
+                    if mode !== 'edit'
+                        button.btn.btn-primary(id='editBtn') Edit
+                    else
+                        button.btn.btn-primary(id='addBtn',onclick='addItems(this);') Add
+                        button.btn.btn-primary(id='deleteBtn',onclick='deleteItems(this);') Delete
+        .line
+            //- .panel.panel-default
+            //-     .panel-heading Teams List
+            //-     .panel-body
+        .row.form-group
+            .col-md-8
+                .input-group
+                    span.input-group-addon Search
+                    input(type="text",placeholder="Team Name",name='search').form-control
+        table.table.table-striped.table-bordered
+            thead
+                tr
+                    th #
+                    th Name
+                    th Description
+                    if mode === 'edit'
+                        th Id
+                tbody
+                    -for(var i=0;i<teams.length;i++)
+                        tr
+                            if mode==='edit'
+                                td
+                                    label
+                                        input(type='checkbox',value=teams[i]._id)
+                            else
+                                td= i+1
+                            td= teams[i].name
+                            td= teams[i].desc
+                            if mode === 'edit'
+                                td= teams[i]._id

@@ -1,0 +1,31 @@
+extends layout
+
+block content
+    style.
+        input[type=text]{
+            max-width:25em;
+        }
+        .line{
+            max-width:40em;
+        }
+    .container
+        .row.header
+            .col-xs-12
+                h1 Add Team
+        .line
+        .row
+            .col-xs-12
+                form.form-horizontal
+                    .form-group
+                        label(for='name').control-label.col-sm-2 Team name
+                        .col-sm-10
+                            input(type='text',id='team-name',placeholder='Name').form-control
+                    .form-group
+                        label(for='desc').control-label.col-sm-2 Description
+                        .col-sm-10
+                            input(type='text',id='desc',placeholder='Descption').form-control
+                    .form-group
+                        .col-sm-10.col-sm-offset-2
+                            .btn-toolbar
+                                .btn.btn-primary Add
+                                .btn.btn-default Cancle
