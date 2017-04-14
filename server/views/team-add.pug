@@ -15,17 +15,17 @@ block content
         .line
         .row
             .col-xs-12
-                form.form-horizontal
+                form.form-horizontal(action='/football/teams/add',id='team-add-form',method='get')
                     .form-group
-                        label(for='name').control-label.col-sm-2 Team name
+                        label(for='team-name').control-label.col-sm-2 Team name
                         .col-sm-10
-                            input(type='text',id='team-name',placeholder='Name').form-control
+                            input(type='text',id='team-name',placeholder='Name',name='name').form-control
                     .form-group
                         label(for='desc').control-label.col-sm-2 Description
                         .col-sm-10
-                            input(type='text',id='desc',placeholder='Descption').form-control
+                            input(type='text',id='desc',placeholder='Descption',name='desc').form-control
                     .form-group
                         .col-sm-10.col-sm-offset-2
                             .btn-toolbar
-                                .btn.btn-primary Add
-                                .btn.btn-default Cancle
+                                button.btn.btn-primary(type='submit',form='team-add-form',value='add')
+                                button.btn.btn-default Cancle

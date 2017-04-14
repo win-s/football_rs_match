@@ -49,7 +49,7 @@ router.get('/teams/add',(req,res,next)=>{
         name:req.query.name,
         desc:req.query.desc
     });
-    
+    console.log(newTeam);
     newTeam.save((err)=>{
         if(err){
             res.render('error',{
@@ -58,7 +58,7 @@ router.get('/teams/add',(req,res,next)=>{
             });
         }
         res.render('success',{
-
+            message:"success Adding"
         });
     });
 });

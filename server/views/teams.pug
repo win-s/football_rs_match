@@ -23,6 +23,9 @@ block content
             });
             console.log(checkedItems);
         }
+        function goto(path){
+            window.location = 'http://'+window.location.host + path;
+        }
         $(document).ready(()=>{
             $('input[name=search]')
                 .keypress((e)=>{
@@ -53,6 +56,7 @@ block content
                     else
                         button.btn.btn-primary(id='addBtn',onclick='addItems(this);') Add
                         button.btn.btn-primary(id='deleteBtn',onclick='deleteItems(this);') Delete
+                        button.btn.btn-default(id='cancle',onclick='goto("/football/teams");') Cancle
         .line
             //- .panel.panel-default
             //-     .panel-heading Teams List
