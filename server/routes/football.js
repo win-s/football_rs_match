@@ -29,15 +29,15 @@ router.get('/teams/edit',(req,res,next)=>{
         mode:'edit'
     });
 });
-router.post('/teams/delete',(req,res,next)=>{
-    if (typeof req.body === "object" && req.body.hasOwnProperty("length")){//check for array type
-        req.body.forEach((item)=>{
+// router.post('/teams/delete',(req,res,next)=>{
+//     if (typeof req.body === "object" && req.body.hasOwnProperty("length")){//check for array type
+//         req.body.forEach((item)=>{
             
-        });
-    }else{
+//         });
+//     }else{
 
-    }
-});
+//     }
+// });
 router.get('/teams/add-form',(req,res,next)=>{
     res.render("team-add",{
         title:"Add Team"
@@ -63,4 +63,7 @@ router.get('/teams/add',(req,res,next)=>{
     });
 });
 
+router.post('/teams/delete',(req,res)=>{
+    
+});
 module.exports = router;

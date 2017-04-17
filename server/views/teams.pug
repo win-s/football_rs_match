@@ -55,35 +55,36 @@ block content
                         button.btn.btn-primary(id='editBtn') Edit
                     else
                         button.btn.btn-primary(id='addBtn',onclick='addItems(this);') Add
-                        button.btn.btn-primary(id='deleteBtn',onclick='deleteItems(this);') Delete
+                        input.btn.btn-primary(id='deleteBtn',type='submit',value='Delete',form='deleteForm')
                         button.btn.btn-default(id='cancle',onclick='goto("/football/teams");') Cancle
         .line
             //- .panel.panel-default
             //-     .panel-heading Teams List
             //-     .panel-body
         .row.form-group
-            .col-md-8
+            .col-md-8form
                 .input-group
                     span.input-group-addon Search
                     input(type="text",placeholder="Team Name",name='search').form-control
-        table.table.table-striped.table-bordered
-            thead
-                tr
-                    th #
-                    th Name
-                    th Description
-                    if mode === 'edit'
-                        th Id
-                tbody
-                    -for(var i=0;i<teams.length;i++)
-                        tr
-                            if mode==='edit'
-                                td
-                                    label
-                                        input(type='checkbox',value=teams[i]._id)
-                            else
-                                td= i+1
-                            td= teams[i].name
-                            td= teams[i].desc
-                            if mode === 'edit'
-                                td= teams[i]._id
+        form(id='deleteForm',method='post',action='delete')
+            table.table.table-striped.table-bordered
+                thead
+                    tr
+                        th #
+                        th Name
+                        th Description
+                        if mode === 'edit'
+                            th Id
+                    tbody
+                        -for(var i=0;i<teams.length;i++)
+                            tr
+                                if mode==='edit'
+                                    td
+                                        label
+                                            input(name='d',type='checkbox',value=teams[i]._id)
+                                else
+                                    td= i+1
+                                td= teams[i].name
+                                td= teams[i].desc
+                                if mode === 'edit'
+                                    td= teams[i]._id
