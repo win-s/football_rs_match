@@ -66,4 +66,17 @@ router.get('/teams/add',(req,res,next)=>{
 router.post('/teams/delete',(req,res)=>{
     
 });
+
+router.get('/matchs',(req,res,next)=>{
+    db
+        .Match
+        .find({})
+        .exec((err,matchs)=>{
+            if(err) return handleError(err);
+            res.render('matchs',{
+                title:'Match Result',
+                matchs:matchs
+            });
+        });
+});
 module.exports = router;

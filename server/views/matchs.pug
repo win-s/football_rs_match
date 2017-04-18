@@ -1,4 +1,35 @@
 extends layout
 
 block content
-    
+    .container
+        .row.header
+            .col-xs-6
+                h1 Match Result
+            .col-xs-6
+        .line
+        .row.form-group
+            .col-md-8
+                .input-group
+                    span.input-group-addon Search
+                    input(type="text",placeholder="Team Name",name="search").form-control
+        table.table.table-striped.table-bordered
+            thead
+                tr
+                    th #
+                    th Home Team
+                    th Score
+                    th 
+                    th Score
+                    th Away Team
+                    th Date
+            tbody
+                -for(var i=0;i<matchs.length;i++)
+                    tr
+                        td= i+1
+                        td= matchs[i].home.name
+                        td= matchs[i].score.home
+                        td vs
+                        td= matchs[i].score.away
+                        td= matchs[i].away.name
+                        th= matchs[i].date
+                
