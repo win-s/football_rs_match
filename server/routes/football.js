@@ -24,7 +24,7 @@ var teamsFn = (req,res,next,renderObj)=>{
 router.get('/teams',(req,res,next)=>{
     teamsFn(req,res,next,{});
 });
-router.get('/teams/edit',(req,res,next)=>{
+router.get('/teams/edit',(req,res,next)=>{home
     teamsFn(req,res,next,{
         mode:'edit'
     });
@@ -73,10 +73,23 @@ router.get('/matchs',(req,res,next)=>{
         .find({})
         .exec((err,matchs)=>{
             if(err) return handleError(err);
+            
             res.render('matchs',{
                 title:'Match Result',
                 matchs:matchs
             });
         });
 });
+
+router.get('/matchs/add-form',(req,res,next)=>{
+    var allTeamPromise = db.Team.find({}).exec();
+    allTeamPromise.then((teams)=>{
+        res.render('match-add',{
+            title:'Add Match Result',
+            teams:teams
+        });
+    });
+
+});
+
 module.exports = router;

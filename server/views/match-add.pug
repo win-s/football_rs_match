@@ -1,0 +1,65 @@
+extends layout
+
+block content
+    style(type='text/css').
+        input[type=text]{
+            max-width:25em;
+        }
+        .line{
+            max-width:40em;
+        }
+        span.caret{
+            margin-left:0.25em!important;
+        }
+    script(type='text/javascript').
+        $(document).ready(()=>{
+            $('.dropdown-menu a.dropdown-item').click((event)=>{
+                var val = $(event.target).attr('data-value');
+                var name = event.target.innerText;
+                var btnId = $(event.target).parent().parent().attr('aria-labelledby');
+                $('#'+btnId +' span.value').html(name)
+                $('input[name='+btnId+']').val(val);
+            });
+        });
+    .container
+        .row.header
+            .col-xs-12
+                h1 Add Result Match
+        .line
+        form.form-horizontal(action='/football/matchs/add-form',method='get',id='match-form')
+            .form-group
+                label(for='home').control-label.col-sm-2 Home Team
+                .col-sm-10
+                    .dropdown
+                        button(id='home',data-toggle='dropdown',aria-haspopup='true',aria-expanded='false').btn.btn-primary.dropdown-toggle 
+                            span.value Select Team
+                            input(name='home',type='hidden',value='')
+                            span.caret
+                        ul.dropdown-menu(aria-labelledby='home')
+                            -for(var i=0;i<teams.length;i++)
+                                li
+                                    a.dropdown-item(href='#',data-value=teams[i]._id)= teams[i].name
+            .form-group
+                label(for='home-score').control-label.col-sm-2 Home Score
+                .col-sm-10
+                    input(name='home-score',type='text',placeholder='Home Score').form-control
+            .form-group
+                label(for='away').control-label.col-sm-2 Away Team
+                .col-sm-10
+                    .dropdown
+                        button(id='away',type='button',data-toggle='dropdown',aria-haspopup='true',aria-expanded='false').btn.btn-primary.dropdown-toggle
+                            span.value Select Team
+                            input(name='away',type='hidden',value='')
+                            span.caret
+                        ul.dropdown-menu(aria-labelledby='away')
+                            -for(var i=0;i<teams.length;i++)
+                                li
+                                    a.dropdown-item(href='#',data-value=teams[i]._id)= teams[i].name
+            .form-group
+                label(for='away-score').control-label.col-sm-2 Away Score
+                .col-sm-10
+                    input(name='away-score',type='text',placeholder='Away Score').form-control         
+            .form-group
+                label(for='date').control-label.col-sm-2 Date
+                .col-sm-10
+                    input(name='date',type='text').form-control
