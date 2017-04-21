@@ -1,6 +1,9 @@
 extends layout
 
 block content
+    script(src='/js/moment.min.js')
+    script(src='/js/bootstrap-datetimepicker.min.js')
+    link(rel='stylesheet',href='/stylesheets/bootstrap-datetimepicker.min.css')
     style(type='text/css').
         input[type=text]{
             max-width:25em;
@@ -11,6 +14,9 @@ block content
         span.caret{
             margin-left:0.25em!important;
         }
+        .input-group.date{
+            max-width: 20em;
+        }
     script(type='text/javascript').
         $(document).ready(()=>{
             $('.dropdown-menu a.dropdown-item').click((event)=>{
@@ -20,13 +26,14 @@ block content
                 $('#'+btnId +' span.value').html(name)
                 $('input[name='+btnId+']').val(val);
             });
+            $('.input-group.date').datetimepicker();
         });
     .container
         .row.header
             .col-xs-12
                 h1 Add Result Match
         .line
-        form.form-horizontal(action='/football/matchs/add-form',method='get',id='match-form')
+        form.form-horizontal(action='/football/matchs/add',method='post',id='match-form')
             .form-group
                 label(for='home').control-label.col-sm-2 Home Team
                 .col-sm-10
@@ -62,4 +69,12 @@ block content
             .form-group
                 label(for='date').control-label.col-sm-2 Date
                 .col-sm-10
-                    input(name='date',type='text').form-control
+                    .input-group.date
+                        input(name='date',type='text').form-control
+                        span.input-group-addon
+                            span.glyphicon.glyphicon-calendar
+            .form-group
+                .col-sm-10.col-sm-offset-2
+                    .btn-toolbar
+                        button.btn.btn-primary(type='submit',form='match-form') Add
+                        button.btn.btn-default Cancle

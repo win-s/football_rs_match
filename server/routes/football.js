@@ -91,5 +91,8 @@ router.get('/matchs/add-form',(req,res,next)=>{
     });
 
 });
-
+router.post('/matchs/add',(req,res)=>{
+    console.log(req.body);
+    res.end(JSON.stringify(req.body));
+});
 module.exports = router;

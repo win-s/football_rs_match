@@ -1,0 +1,14 @@
+{
+  "name": "server",
+  "description": "",
+  "main": "",
+  "authors": [
+    "win-s <desperandro@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/win-s/football_rs_match",
+  "private": true,
+  "dependencies": {
+    "eonasdan-bootstrap-datetimepicker": "^4.17.47"
+  }
+}
