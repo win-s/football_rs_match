@@ -1,6 +1,8 @@
-var express = require('express');
-var router = express.Router();
-var db = require('../bin/dbCollections');
+const express = require('express');
+const router = express.Router();
+const db = require('../bin/dbCollections');
+const moment = require('moment');
+const Types = require('mongoose').Schema.Types;
 // console.log(db);
 var teamsFn = (req,res,next,renderObj)=>{
     let obj = typeof req.query.s === "string" &&  req.query.s !== "" 
@@ -36,7 +38,7 @@ router.get('/teams/edit',(req,res,next)=>{home
 //         });
 //     }else{
 
-//     }
+//     }toString()
 // });
 router.get('/teams/add-form',(req,res,next)=>{
     res.render("team-add",{
@@ -89,10 +91,38 @@ router.get('/matchs/add-form',(req,res,next)=>{
             teams:teams
         });
     });
-
 });
+
 router.post('/matchs/add',(req,res)=>{
-    console.log(req.body);
+    awayTeam = db.Team.findOne({
+        _id:req.body.away
+    });
+    
+    var home = {
+        name:req.body.home.split(',')[1],
+        team_id:req.body.home.split(',')[0]
+    };
+    var away ={
+        name:req.body.away.split(',')[1],
+        team_id:req.body.away.split(',')[0]
+    };
+
+    (new db.Match({
+        home:{
+            name:home.name,
+            team_id:home.team_id
+        },
+        away:{
+            name:away.name,
+            team_id:away.team_id
+        },
+        score:{
+            home:req.body['home-score'],
+            away:req.body['away-score']
+        },
+        date:moment(req.body['iso-date']).toDate()
+    })).save();
     res.end(JSON.stringify(req.body));
 });
+route.post
 module.exports = router;

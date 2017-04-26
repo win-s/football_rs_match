@@ -20,7 +20,9 @@ block content
     script(type='text/javascript').
         $(document).ready(()=>{
             $('.dropdown-menu a.dropdown-item').click((event)=>{
-                var val = $(event.target).attr('data-value');
+                var $target = $(event.target);
+                var val = $target.attr('data-value');
+                val = val + ',' + $target.attr('data-team-name');
                 var name = event.target.innerText;
                 var btnId = $(event.target).parent().parent().attr('aria-labelledby');
                 $('#'+btnId +' span.value').html(name)
@@ -28,12 +30,17 @@ block content
             });
             $('.input-group.date').datetimepicker();
         });
+        function formsubmit(form){
+            var isoTime= moment($(form).find('input[name=date]').val(),'MM/DD/YYYY hh:mm A').toISOString();
+            $(form).find('input[name=iso-date]').val(isoTime);
+            return true;
+        }
     .container
         .row.header
             .col-xs-12
                 h1 Add Result Match
         .line
-        form.form-horizontal(action='/football/matchs/add',method='post',id='match-form')
+        form.form-horizontal(action='/football/matchs/add',method='post',id='match-form',onsubmit='formsubmit(this)')
             .form-group
                 label(for='home').control-label.col-sm-2 Home Team
                 .col-sm-10
@@ -45,7 +52,7 @@ block content
                         ul.dropdown-menu(aria-labelledby='home')
                             -for(var i=0;i<teams.length;i++)
                                 li
-                                    a.dropdown-item(href='#',data-value=teams[i]._id)= teams[i].name
+                                    a.dropdown-item(href='#',data-value=teams[i]._id,data-team-name=teams[i].name)= teams[i].name
             .form-group
                 label(for='home-score').control-label.col-sm-2 Home Score
                 .col-sm-10
@@ -61,7 +68,7 @@ block content
                         ul.dropdown-menu(aria-labelledby='away')
                             -for(var i=0;i<teams.length;i++)
                                 li
-                                    a.dropdown-item(href='#',data-value=teams[i]._id)= teams[i].name
+                                    a.dropdown-item(href='#',data-value=teams[i]._id,data-team-name=teams[i].name)= teams[i].name
             .form-group
                 label(for='away-score').control-label.col-sm-2 Away Score
                 .col-sm-10
@@ -71,6 +78,7 @@ block content
                 .col-sm-10
                     .input-group.date
                         input(name='date',type='text').form-control
+                        input(type='hidden',name='iso-date')
                         span.input-group-addon
                             span.glyphicon.glyphicon-calendar
             .form-group
