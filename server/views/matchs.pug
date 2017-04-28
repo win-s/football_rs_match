@@ -1,35 +1,81 @@
 extends layout
 
 block content
+    style.
+        .enable-edit-mode td[for]{
+            cursor:pointer;
+        }
+    script(type='text/javascript').
+        var mode='non-edit';
+        function onDelete(){
+            
+        }
+        function goto(page){
+            switch(page){
+                case 'add':window.location.pathname = "/football/matchs/add-form";break;
+            }
+        }
+        function editMode(enableEdit){
+            if(enableEdit){
+                $('.non-edit-mode').hide();
+                $('.edit-mode').show();
+                $(".container").addClass("enable-edit-mode");
+                mode='edit';
+            }else{
+                $('.non-edit-mode').show();
+                $('.edit-mode').hide();
+                $(".container").removeClass("enable-edit-mode");
+                mode='non-edit';
+            }
+        }
+        $(document).ready(()=>{
+            $("td[for]").click((event)=>{
+                if(mode==="edit"){
+                    var id = $(event.target).attr("for");
+                    var checked = $("#"+id).prop("checked");
+                    $("#"+id).prop("checked",!checked);
+                }
+            });
+        });
     .container
         .row.header
             .col-xs-6
                 h1 Match Result
-            .col-xs-6
+            .col-xs-6(style='text-align:right')
+                .non-edit-mode.btn-toolbar(role='toolbar')
+                    button.btn.btn-primary(id='editBtn',onclick='editMode(true)') Edit
+                .edit-mode.btn-toolbar(role='toolbar',style='display:none;')
+                    button.btn.btn-primary(id='addBtn',onclick="goto('add')") Add
+                    button.btn.btn-primary(type='submit',form='deleteForm',id='delBtn',onclick='onDelete()') Delete
+                    button.btn.btn-default(id='cancleBtn',onclick='editMode(false)') Cancle
         .line
         .row.form-group
             .col-md-8
                 .input-group
                     span.input-group-addon Search
                     input(type="text",placeholder="Team Name",name="search").form-control
-        table.table.table-striped.table-bordered
-            thead
-                tr
-                    th #
-                    th Home Team
-                    th Score
-                    th 
-                    th Score
-                    th Away Team
-                    th Date
-            tbody
-                -for(var i=0;i<matchs.length;i++)
+        form(id="deleteForm",method="post",action="matchs/delete")
+            table.table.table-striped.table-bordered
+                thead
                     tr
-                        td= i+1
-                        td= matchs[i].home.name
-                        td= matchs[i].score.home
-                        td vs
-                        td= matchs[i].score.away
-                        td= matchs[i].away.name
-                        th= matchs[i].date
+                        th.edit-mode(style="display:none")
+                        th #
+                        th Home Team
+                        th Score
+                        th 
+                        th Score
+                        th Away Team
+                        th Date
+                tbody
+                    -for(var i=0;i<matchs.length;i++)
+                        tr
+                            td.edit-mode(style="display:none",for='r'+(i+1))
+                                input(name='del-items',id='r'+(i+1),type="checkbox",value=matchs[i]._id)
+                            td(for='r'+(i+1))= i+1
+                            td(for='r'+(i+1))= matchs[i].home.name
+                            td(for='r'+(i+1))= matchs[i].score.home
+                            td(for='r'+(i+1)) vs
+                            td(for='r'+(i+1))= matchs[i].score.away
+                            td(for='r'+(i+1))= matchs[i].away.name
+                            td(for='r'+(i+1))= matchs[i].date
                 

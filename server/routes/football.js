@@ -26,7 +26,7 @@ var teamsFn = (req,res,next,renderObj)=>{
 router.get('/teams',(req,res,next)=>{
     teamsFn(req,res,next,{});
 });
-router.get('/teams/edit',(req,res,next)=>{home
+router.get('/teams/edit',(req,res,next)=>{
     teamsFn(req,res,next,{
         mode:'edit'
     });
@@ -124,5 +124,19 @@ router.post('/matchs/add',(req,res)=>{
     })).save();
     res.end(JSON.stringify(req.body));
 });
-route.post
+
+router.post('/matchs/delete',(req,res)=>{
+    // res.write( JSON.stringify(req.body) );
+    db.Match
+        .find({
+            _id:{
+                $in:req.body['del-items']
+            }
+        })
+        .remove()
+        .exec((err,matchs)=>{
+            res.end( JSON.stringify(matchs));
+        });
+});
+
 module.exports = router;
