@@ -66,7 +66,18 @@ router.get('/teams/add',(req,res,next)=>{
 });
 
 router.post('/teams/delete',(req,res)=>{
-    
+    var deleteList = req.body.d || [];
+    db.Team
+        .find({
+            _id:{
+                $in:deleteList
+            }
+        })
+        .remove()
+        .exec( err=>{
+            if(err) return handleError(err);
+            res.end( JSON.stringify( req.body ) );
+        });
 });
 
 router.get('/matchs',(req,res,next)=>{

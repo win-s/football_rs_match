@@ -5,6 +5,7 @@ block content
         function getUrlObj(){
             let url = window.location.href;
             let urlPart = url.split('?');
+            urlPart[1] = urlPart[1] || '';
             return {
                 host:urlPart[0],
                 queryString:urlPart[1]
@@ -42,7 +43,8 @@ block content
                 });
             $('#editBtn').click(()=>{
                 var url = getUrlObj(window.location.href);
-                window.location = url.host +'/edit?' + url.queryString;
+                window.location = url.host +'/edit' + (url.queryString? '?'+url.queryString : '' );
+
             });
         });
     .container
