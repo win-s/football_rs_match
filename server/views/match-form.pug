@@ -25,7 +25,7 @@ block content
                 val = val + ',' + $target.attr('data-team-name');
                 var name = event.target.innerText;
                 var btnId = $(event.target).parent().parent().attr('aria-labelledby');
-                $('#'+btnId +' span.value').html(name)
+                $('#'+btnId +' span.value').html(name);
                 $('input[name='+btnId+']').val(val);
             });
             $('.input-group.date').datetimepicker();
