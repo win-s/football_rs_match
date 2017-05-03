@@ -5,6 +5,9 @@ block content
         .enable-edit-mode td[for]{
             cursor:pointer;
         }
+        .enable-edit-mode table>tbody>tr>td{
+            vertical-align:middle;
+        }
     script(type='text/javascript').
         var mode='non-edit';
         function onDelete(){
@@ -69,9 +72,11 @@ block content
                 tbody
                     -for(var i=0;i<matchs.length;i++)
                         tr
-                            td.edit-mode(style="display:none",for='r'+(i+1))
+                            td.edit-mode(style="display:none;",for='r'+(i+1))
                                 input(name='del-items',id='r'+(i+1),type="checkbox",value=matchs[i]._id)
-                            td(for='r'+(i+1))= i+1
+                            td.non-edit-mode(for='r'+(i+1))= i+1
+                            td.edit-mode(for='r'+(i+1),style="display:none;")
+                                a.btn.btn-primary(id="update",href="/football/matchs/update-form?id="+matchs[i]._id) Edit
                             td(for='r'+(i+1))= matchs[i].home.name
                             td(for='r'+(i+1))= matchs[i].score.home
                             td(for='r'+(i+1)) vs

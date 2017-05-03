@@ -99,7 +99,9 @@ router.get('/matchs/add-form',(req,res,next)=>{
     allTeamPromise.then((teams)=>{
         res.render('match-add',{
             title:'Add Match Result',
-            teams:teams
+            mode:"add",
+            teams:teams,
+            match:undefined
         });
     });
 });
@@ -149,5 +151,28 @@ router.post('/matchs/delete',(req,res)=>{
             res.end( JSON.stringify(matchs));
         });
 });
-
+router.post("/matchs/update",(req,res)=>{
+    res.end( req.query.id );
+});
+router.get("/matchs/update-form",(req,res)=>{
+    var allTeamPromise = db.Team.find({}).exec();
+    var matchPromise = db.Match
+                        .find({
+                            _id:req.query.id
+                        }).exec();
+    Promise
+        .all([allTeamPromise,matchPromise])
+        .then( data=>{
+            var teams = data[0];
+            var match = data[1][0] || undefined;
+            console.log( JSON.stringify(match) );
+            res.render("match-form",{
+                title:"Update Match",
+                mode:"update",
+                teams:teams,
+                match:match,
+                moment:moment
+            });
+        });
+});
 module.exports = router;
