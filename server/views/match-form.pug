@@ -41,13 +41,15 @@ block content
                 h1 Add Result Match
         .line
         form.form-horizontal(action=mode==="update"?"/football/matchs/update":"/football/matchs/add",method='post',id='match-form',onsubmit='formsubmit(this)')
+            -if(mode==="update")
+                input(name="id",type="hidden",value=match._id)
             .form-group
                 label(for='home').control-label.col-sm-2 Home Team
                 .col-sm-10
                     .dropdown
                         button(id='home',data-toggle='dropdown',aria-haspopup='true',aria-expanded='false').btn.btn-primary.dropdown-toggle 
                             span.value= match!==undefined ? match.home.name : "Select Team"
-                            input(name='home',type='hidden',value= match.home.team_id)
+                            input(name='home',type='hidden',value= ( match===undefined?"": match.home.team_id + "," + match.home.name  ) )
                             span.caret
                         ul.dropdown-menu(aria-labelledby='home')
                             -for(var i=0;i<teams.length;i++)
@@ -56,14 +58,14 @@ block content
             .form-group
                 label(for='home-score').control-label.col-sm-2 Home Score
                 .col-sm-10
-                    input(name='home-score',type='text',placeholder='Home Score',value=match.score.home).form-control
+                    input(name='home-score',type='text',placeholder='Home Score',value=match===undefined?0:match.score.home).form-control
             .form-group
                 label(for='away').control-label.col-sm-2 Away Team
                 .col-sm-10
                     .dropdown
                         button(id='away',type='button',data-toggle='dropdown',aria-haspopup='true',aria-expanded='false').btn.btn-primary.dropdown-toggle
                             span.value= match!==undefined ? match.away.name : "Select Team"
-                            input(name='away',type='hidden',value=match.away.team_id)
+                            input(name='away',type='hidden',value=match===undefined?"": ( match.away.team_id + ","+match.away.name  ) )
                             span.caret
                         ul.dropdown-menu(aria-labelledby='away')
                             -for(var i=0;i<teams.length;i++)
@@ -72,12 +74,12 @@ block content
             .form-group
                 label(for='away-score').control-label.col-sm-2 Away Score
                 .col-sm-10
-                    input(name='away-score',type='text',placeholder='Away Score',value=match.score.away).form-control         
+                    input(name='away-score',type='text',placeholder='Away Score',value=match===undefined?0:match.score.away).form-control         
             .form-group
                 label(for='date').control-label.col-sm-2 Date
                 .col-sm-10
                     .input-group.date
-                        input(name='date',type='text',value=moment(match.date).format('MM/DD/YYYY hh:mm A').toString()).form-control
+                        input(name='date',type='text',value=match===undefined?"":moment(match.date).format('MM/DD/YYYY hh:mm A').toString()).form-control
                         input(type='hidden',name='iso-date')
                         span.input-group-addon
                             span.glyphicon.glyphicon-calendar

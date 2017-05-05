@@ -1,5 +1,16 @@
 extend layout
-
 block content
+    style.
+        .glyphicon{
+            display:inline-block;
+            padding-right:0.5em;
+        }
+        .toolbar{
+            padding-bottom:1em;
+        }
+    .toolbar    
+        a.btn.btn-default(href=back,role="button")
+            span( class="glyphicon glyphicon-arrow-left" aria-hidden="true" )
+            span Back
+    .line
     h1= message
-    

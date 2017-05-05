@@ -58,6 +58,7 @@ router.get('/teams/add',(req,res,next)=>{
                 error:err,
                 message:'Can\'t add this team to database.'
             });
+            return handleError(err);
         }
         res.render('success',{
             message:"success Adding"
@@ -75,8 +76,18 @@ router.post('/teams/delete',(req,res)=>{
         })
         .remove()
         .exec( err=>{
-            if(err) return handleError(err);
-            res.end( JSON.stringify( req.body ) );
+            if(err){
+                res.render("error",{
+                    error:err,
+                    message:"Error on deleting team(s)",
+                    back:"/football/teams"
+                });
+                return handleError(err);
+            }
+            res.render("success",{
+                message:"Successfully Deleting",
+                back:"/football/teams"
+            });
         });
 });
 
@@ -97,7 +108,7 @@ router.get('/matchs',(req,res,next)=>{
 router.get('/matchs/add-form',(req,res,next)=>{
     var allTeamPromise = db.Team.find({}).exec();
     allTeamPromise.then((teams)=>{
-        res.render('match-add',{
+        res.render('match-form',{
             title:'Add Match Result',
             mode:"add",
             teams:teams,
@@ -134,8 +145,22 @@ router.post('/matchs/add',(req,res)=>{
             away:req.body['away-score']
         },
         date:moment(req.body['iso-date']).toDate()
-    })).save();
-    res.end(JSON.stringify(req.body));
+    })).save( err=>{
+        if(err){
+            res.render("error",{
+                error:err,
+                message:"Error Adding Match",
+                back:"/football/matchs"
+            });
+            return handleError(err);
+        }
+        res.render("success",{
+            message:"Success Adding Match",
+            back:"/football/matchs"
+        });
+    } );
+
+    // res.end(JSON.stringify(req.body));
 });
 
 router.post('/matchs/delete',(req,res)=>{
@@ -148,11 +173,61 @@ router.post('/matchs/delete',(req,res)=>{
         })
         .remove()
         .exec((err,matchs)=>{
-            res.end( JSON.stringify(matchs));
+            if(err){
+                res.render("error",{
+                    error:err,
+                    message:"Error on deleting",
+                    back:"/football/matchs"
+                });
+                return handleError(err);
+            }
         });
 });
 router.post("/matchs/update",(req,res)=>{
-    res.end( req.query.id );
+    var item = req.body;
+    var home = {
+        name: item.home.split(',')[1],
+        team_id:item.home.split(',')[0]
+    }
+    var away = {
+        name:item.away.split(',')[1],
+        team_id:item.away.split(',')[0]
+    }
+    var updateItem ={
+        home:{
+            name:home.name,
+            team_id:home.team_id
+        },
+        away:{
+            name:away.name,
+            team_id:away.team_id
+        },
+        score:{
+            home:item["home-score"],
+            away:item["away-score"]
+        },
+        date:moment(req.body["iso-date"]).toDate()
+    };
+    
+    db.Match.update({
+            '_id':req.body.id
+        },
+        updateItem,
+        err=>{
+        if(err){
+            res.render("error",{
+                error:err,
+                back:"/football/match",
+                message:"Error on Updating match"
+            });
+            return handleError(err);
+        }
+        res.render("success",{
+            message:"Success Update",
+            back:"/football/matchs"
+        });
+    });
+    
 });
 router.get("/matchs/update-form",(req,res)=>{
     var allTeamPromise = db.Team.find({}).exec();
