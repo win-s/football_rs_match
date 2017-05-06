@@ -1,6 +1,10 @@
 extends layout
 
 block content
+    style.
+        .table>tbody>tr>td{
+            vertical-align:middle;
+        }
     script(type='text/javascript').
         function getUrlObj(){
             let url = window.location.href;
@@ -67,12 +71,14 @@ block content
             .col-md-8
                 .input-group
                     span.input-group-addon Search
-                    input(type="text",placeholder="Team Name",name='search').form-control
+                    input(type="text",placeholder="Team Name",name='search',value=s).form-control
         form(id='deleteForm',method='post',action='delete')
             table.table.table-striped.table-bordered
                 thead
                     tr
                         th #
+                        if mode === "edit"
+                            th
                         th Name
                         th Description
                         if mode === 'edit'
@@ -84,6 +90,8 @@ block content
                                     td
                                         label
                                             input(name='d',type='checkbox',value=teams[i]._id)
+                                    td
+                                        a(href="update-form?d="+teams[i]._id,role="button").btn.btn-primary Edit
                                 else
                                     td= i+1
                                 td= teams[i].name

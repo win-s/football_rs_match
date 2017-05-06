@@ -4,7 +4,7 @@ const db = require('../bin/dbCollections');
 const moment = require('moment');
 const Types = require('mongoose').Schema.Types;
 // console.log(db);
-var teamsFn = (req,res,next,renderObj)=>{
+const teamsFn = (req,res,next,renderObj)=>{
     let obj = typeof req.query.s === "string" &&  req.query.s !== "" 
                 ? {
                     $text:{
@@ -18,7 +18,8 @@ var teamsFn = (req,res,next,renderObj)=>{
             if(err)return handleError(err);
             Object.assign(renderObj,{
                 'teams':teams,
-                'title':'Team List'
+                'title':'Team List',
+                's':req.query.s
             });
             res.render('teams',renderObj);
         });
@@ -41,8 +42,56 @@ router.get('/teams/edit',(req,res,next)=>{
 //     }toString()
 // });
 router.get('/teams/add-form',(req,res,next)=>{
-    res.render("team-add",{
-        title:"Add Team"
+    res.render("team-form",{
+        title:"Add Team",
+        mode:"add"
+    });
+});
+router.get("/teams/update-form",(req,res,next)=>{
+    db.Team
+        .findOne({
+            _id:req.query.d
+        })
+        .exec( (err,team)=>{
+            if(err){
+                res.render("error",{
+                    error:err,
+                    message:"Error occure"
+                });
+            }else if(team===null){
+                res.render("error",{
+                    error:err,
+                    message:"Team is not found Id:"+req.query.d
+                });
+            }else{
+                res.render("team-form",{
+                    title:"Update Form",
+                    mode:"update",
+                    team:team
+                });
+            }
+        });
+        
+});
+router.get("/teams/update",(req,res)=>{
+    db.Team.update({
+        _id:req.query.id
+    },{
+        name:req.query.name,
+        desc:req.query.desc
+    },
+    err=>{
+        if(err){
+            res.render("error",{
+                error:err,
+                message:"Errror on updating"
+            });
+            return new handleError(err);
+        }
+        res.render("success",{
+            back:"./edit",
+            message:"Update Success"
+        });
     });
 });
 
@@ -61,7 +110,8 @@ router.get('/teams/add',(req,res,next)=>{
             return handleError(err);
         }
         res.render('success',{
-            message:"success Adding"
+            message:"Success Adding",
+            back:"./edit"
         });
     });
 });
