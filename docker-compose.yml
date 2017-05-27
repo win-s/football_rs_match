@@ -1,0 +1,17 @@
+version: "3"
+
+services: 
+    web:
+        image: bgesyn/football_rs
+        ports:
+            - "3000:3000"
+        networks:
+            - back-tier
+            - font-tier
+    db:
+        image: mongo
+        networks:
+            -back-tier
+networks:
+    back-tier: 
+    font-tier: 
